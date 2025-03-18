@@ -23,6 +23,10 @@ const threadSchema = new mongoose.Schema({
     enum: ['general', 'tech', 'sports'], 
     default: 'general' 
   },
+  replies: [{ 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'Reply' 
+  }],
   createdAt: { 
     type: Date, 
     default: Date.now 

@@ -29,6 +29,22 @@ router.get('/', async (req, res) => {
   }
 });
 
+router.get('/:id', async (req, res) => {
+  try {
+    const thread = await Thread.findById(req.params.id)
+      .populate('author', 'email')
+      .populate({
+        path: 'replies',
+        populate: { path: 'author', select: 'email' }
+      });
+
+    if (!thread) return res.status(404).json({ error: 'Thread non trouvé' });
+    res.json(thread);
+  } catch (err) {
+    res.status(500).json({ error: 'Erreur serveur' });
+  }
+});
+
 router.delete('/:id', authenticate, isModerator, async (req, res) => {
   try {
     await Thread.findByIdAndDelete(req.params.id);
